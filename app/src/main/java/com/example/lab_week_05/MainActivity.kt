@@ -67,25 +67,30 @@ class MainActivity : AppCompatActivity() {
                     val firstImage = imageList?.firstOrNull()?.imageUrl.orEmpty()
 
                     if (firstImage.isNotBlank()) {
-                        // load gambar ke ImageView
                         imageLoader.loadImage(firstImage, imageResultView)
                     } else {
                         Log.d(MAIN_ACTIVITY, "Missing image URL")
                     }
 
-                    // tampilkan URL juga di TextView
-                    apiResponseView.text =
-                        getString(R.string.image_placeholder, firstImage)
+                    // 🔥 ambil breed name kalau ada, kalau kosong tulis "Unknown"
+                    val breedName = imageList
+                        ?.firstOrNull()
+                        ?.breeds
+                        ?.firstOrNull()
+                        ?.name ?: "Unknown"
+
+                    // tampilkan breed di TextView, bukan URL
+                    apiResponseView.text = getString(R.string.breed_placeholder, breedName)
                 } else {
                     Log.e(
                         MAIN_ACTIVITY,
-                        "Failed to get response\n" +
-                                response.errorBody()?.string().orEmpty()
+                        "Failed to get response\n" + response.errorBody()?.string().orEmpty()
                     )
                 }
             }
         })
     }
+
 
     companion object {
         const val MAIN_ACTIVITY = "MAIN_ACTIVITY"
